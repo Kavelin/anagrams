@@ -19,9 +19,10 @@
     <input
       placeholder="enter the word"
       id="input"
-      oninput="clickInput(this)"
-      onkeydown="enter(event)"
+      oninput="clickInput(this.value)"
+      onkeydown="(event => {if (event.key == 'Enter') enter()})(event)"
     />
+    <input type="submit" value="enter" onclick="enter()">
     <input
       type="submit"
       id="shuffle"

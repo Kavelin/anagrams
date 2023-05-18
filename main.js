@@ -62,30 +62,31 @@ window.onload = async () => {
   file.send(null);
 };
 
-function clickInput(e) {
-  input = e.value;
+function clickInput(val) {
+  if (check(val)) input = val;
+  document.querySelector("#input").value = input;
   statUp(defStatus);
 }
 
-function enter(e) {
-  if (e.key == "Enter") {
-    document.querySelector("#input").value = "";
-    
-    if (
-      input.length >= 3 &&
-      input.length <= length &&
-      check(input) &&
-      hasWord(input)
-    ) {
-      if (input.length == 6) score += 10;
-      else score += input.length;
-      document.querySelector("#score").innerText = "Score: " + score;
-    } else if (input.length < 3) statUp("Too short!");
-    else if (input.length > 6) statUp("Too long!");
-    else if (found.indexOf(input) > -1) statUp("You already entered that!");
-    else statUp("Not a word!");
-  }
+function enter() {
+  if (
+    input.length >= 3 &&
+    input.length <= length &&
+    check(input) &&
+    hasWord(input)
+  ) {
+    if (input.length == 6) score += 10;
+    else score += input.length;
+    document.querySelector("#score").innerText = "Score: " + score;
+  } else if (input.length < 3) statUp("Too short!");
+  else if (input.length > 6) statUp("Too long!");
+  else if (found.indexOf(input) > -1) statUp("You already entered that!");
+  else statUp("Not a word!");
+
+  document.querySelector("#input").value = "";
+  input = "";
 }
+
 function statUp(str) {
   document.querySelector("#status").innerText = str;
 }
@@ -97,6 +98,7 @@ async function shuffleLetters() {
     let node = document.createElement("div");
     node.innerText = i;
     node.classList.add("letter");
+    node.addEventListener("click", () => clickInput(input + i));
     document.querySelector("#letters").appendChild(node);
   });
 }

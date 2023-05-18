@@ -6,6 +6,10 @@ body {
 
 .letter {
   display: inline-block;
-  width: 50px;
   padding:8px;
+  cursor:pointer;
+  transition: 300ms;
+}
+.letter:hover {
+  background:#aaa;
 }
