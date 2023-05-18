@@ -5,6 +5,7 @@ let length = 6;
 let score = 0;
 let lists = [[], [], [], []];
 let found = [];
+let timer = 60;
 let defStatus = "Enter a word with the given letters";
 
 let words = [];
@@ -62,13 +63,17 @@ async function gen() {
 
 function disable() {
   document
-    .querySelectorAll("#letters div", "#enter")
+    .querySelectorAll("#letters button, #enter, #input, #shuffle")
     .forEach((i) => (i.disabled = !i.disabled));
 }
 
 window.onload = async () => {
   await file.open("GET", "java/words.txt", true);
   file.send(null);
+  setInterval(() => {
+    if (--timer == 0) disable();
+    if (timer >= 0) document.querySelector('#time').innerText = "Time: " + timer;
+  }, 1000);
 };
 
 function clickInput(val) {
@@ -115,3 +120,5 @@ async function shuffleLetters() {
     document.querySelector("#letters").appendChild(node);
   });
 }
+
+document.querySelector("#shuffle").addEventListener('click', shuffleLetters);
