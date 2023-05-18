@@ -4,12 +4,12 @@ body {
 
 }
 
-.letter {
+#letters div {
   display: inline-block;
   padding:8px;
   cursor:pointer;
   transition: 300ms;
 }
-.letter:hover {
+#letters div:hover {
   background:#aaa;
 }

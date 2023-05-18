@@ -43,19 +43,28 @@ file.onreadystatechange = async () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
     words = file.responseText.split("\n");
 
-    while (word.length != length)
-      word = words[Math.floor(Math.random() * words.length)]; //make sure the word is `length` letters long
+    await gen();
+  }
+};
 
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < words.length; j++)
-        if (words[j].length == i + 3 && check(words[j]))
-          lists[i].push(words[j]);
-    }
+async function gen() {
+  while (word.length != length)
+    word = words[Math.floor(Math.random() * words.length)]; //make sure the word is `length` letters long
+
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < words.length; j++)
+      if (words[j].length == i + 3 && check(words[j])) lists[i].push(words[j]);
   }
 
   await shuffleLetters();
   statUp(defStatus);
-};
+}
+
+function disable() {
+  document
+    .querySelectorAll("#letters div", "#enter")
+    .forEach((i) => (i.disabled = !i.disabled));
+}
 
 window.onload = async () => {
   await file.open("GET", "java/words.txt", true);
@@ -77,7 +86,12 @@ function enter() {
   ) {
     if (input.length == 6) score += 10;
     else score += input.length;
+
     document.querySelector("#score").innerText = "Score: " + score;
+
+    let node = document.createElement("li");
+    node.innerText = input;
+    document.querySelector("#found").appendChild(node);
   } else if (input.length < 3) statUp("Too short!");
   else if (input.length > 6) statUp("Too long!");
   else if (found.indexOf(input) > -1) statUp("You already entered that!");
@@ -95,9 +109,8 @@ async function shuffleLetters() {
   document.querySelector("#letters").innerHTML = "";
   shuffled = await shuffle(word.split(""));
   await shuffled.forEach((i) => {
-    let node = document.createElement("div");
+    let node = document.createElement("button");
     node.innerText = i;
-    node.classList.add("letter");
     node.addEventListener("click", () => clickInput(input + i));
     document.querySelector("#letters").appendChild(node);
   });

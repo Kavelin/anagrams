@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="favicon.png" />
   </head>
-  <body>
+  <body aria-disabled="true">
     <h1>Anagra</h1>
     <div>
       <div id="score">Score: 0</div>
@@ -19,16 +19,18 @@
     <input
       placeholder="enter the word"
       id="input"
+      spellcheck="false"
       oninput="clickInput(this.value)"
       onkeydown="(event => {if (event.key == 'Enter') enter()})(event)"
     />
-    <input type="submit" value="enter" onclick="enter()">
+    <input type="submit" value="enter" id="enter" onclick="enter()">
     <input
       type="submit"
       id="shuffle"
       value="shuffle"
-      onclick="async _ => await shuffleLetters()"
+      onclick="shuffleLetters"
     />
+    <ul id="found"></ul>
     <script src="main.js"></script>
   </body>
 </html>
