@@ -8,6 +8,19 @@ body {
   font-size: 5vw;
 }
 
+#new-game-options {
+  position:absolute;
+  background:white;
+  width:100vw;
+  height:100vh;
+  font-size:5vw;
+  user-select: none;
+}
+
+#new-game-options input {
+  font-size:5vw;
+}
+
 #inputs input {
   height: 25vh;
   font-size: 8vw;
@@ -48,5 +61,5 @@ body {
 #found li {
   border: rgb(141, 141, 141) 1px solid;
   border-radius: 0.5em;
-  padding:1em;
+  padding: 1em;
 }

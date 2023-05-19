@@ -3,10 +3,11 @@ let input = "";
 let shuffled = [];
 let length = 7;
 let score = 0;
-let lists = [[], [], [], []];
+let lists = [];
 let found = [];
 let timer = 60;
 let defStatus = "Enter a word with the given letters";
+let interval;
 
 let words = [];
 
@@ -42,19 +43,21 @@ async function shuffle(array) {
 var file = new XMLHttpRequest();
 file.onreadystatechange = async () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
-    words = file.responseText.split("\n").filter(n => n.indexOf('\'') == -1);
-
+    words = file.responseText.split("\n").filter(n => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)); //i'm getting it from an outside source so i have to filter it here
     await gen();
   }
 };
 
 async function gen() {
+  lists = Array(words.reduce((a, b) => a.length < b.length ? b : a, "").length - 3).fill([]);
   while (word.length != length)
     word = words[Math.floor(Math.random() * words.length)]; //make sure the word is `length` letters long
 
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < words.length; j++)
+  for (let i = 0; i < words.reduce((a, b) => a.length < b.length ? b : a, "").length - 3; i++) {
+    for (let j = 0; j < words.length; j++) {
+      //console.log(words[j].length, i)
       if (words[j].length == i + 3 && check(words[j])) lists[i].push(words[j]);
+    }
   }
   await shuffleLetters();
   statUp(defStatus);
@@ -75,15 +78,16 @@ function enable() {
 window.onload = async () => {
   await file.open("GET", "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", true);
   file.send(null);
-  start();
+  //start();
 };
 
 function start() {
-  setInterval(() => {
+  interval = setInterval(() => {
     if (--timer == 0) {
       disable();
-      statUp("Times up! The 6 letter word was: " + word + ".");
-      document.querySelector("#new-game").style.display = "inline-block";
+      statUp("Times up! The full anagram word was: " + word + ".");
+      document.querySelector("#new-game-options").style.display = "block";
+      clearInterval(interval);
     }
     if (timer >= 0)
       document.querySelector("#time").innerText = "Time: " + timer;
@@ -107,8 +111,7 @@ function enter() {
       confetti(50);
       score += 10;
       statUp('Wow!');
-    }
-    else score += input.length;
+    } else score += input.length;
 
     document.querySelector("#score").innerText = "Score: " + score;
 
@@ -136,7 +139,6 @@ async function shuffleLetters() {
     node.innerText = i;
     node.addEventListener("click", () => clickInput(input + i));
     document.querySelector("#letters").appendChild(node);
-    document.querySelector("#letters").style.gridTemplateColumns = Array(length).fill('auto').join(' ');
   });
 }
 
@@ -145,16 +147,17 @@ async function newGame() {
   input = "";
   shuffled = [];
   score = 0;
-  lists = [[], [], [], []];
   found = [];
   timer = 60;
+  length = Number(document.querySelector('#length-of-word').value);
   await gen().then(() => {
     document.querySelector("#score").innerText = "Score: " + score;
     document.querySelector("#time").innerText = "Time: " + timer;
-    document.querySelector("#new-game").style.display = "none";
+    document.querySelector("#new-game-options").style.display = "none";
     document.querySelector("#found").innerHTML = "";
-
+    document.querySelector("#letters").style.gridTemplateColumns = Array(length).fill('auto').join(' ');
     enable();
+    start();
   });
 }
 
