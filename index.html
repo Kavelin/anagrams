@@ -15,26 +15,23 @@
       <div id="status"></div>
       <div id="letters"></div>
     </div>
-    <input
-      placeholder="enter the word"
-      id="input"
-      spellcheck="false"
-      oninput="clickInput(this.value)"
-      onkeydown="(event => {if (event.key == 'Enter') enter()})(event)"
-    />
-    <input type="submit" value="enter" id="enter" onclick="enter()">
-    <input
-      type="submit"
-      id="shuffle"
-      value="shuffle"
-    />
-    <input
-      type="submit"
-      id="new-game"
-      value="new game"
-      style="display:none;"
-    />
-
+    <div id="inputs">
+      <input
+        placeholder="enter the word"
+        id="input"
+        spellcheck="false"
+        oninput="clickInput(this.value)"
+        onkeydown="(event => {if (event.key == 'Enter') enter()})(event)"
+      />
+      <input type="submit" value="↩" id="enter" onclick="enter()" />
+      <input type="submit" id="shuffle" value="⤮" />
+      <input
+        type="submit"
+        id="new-game"
+        value="new game"
+        style="display: none"
+      />
+    </div>
     <ul id="found"></ul>
     <script src="main.js"></script>
   </body>

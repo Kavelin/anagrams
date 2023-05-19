@@ -79,7 +79,7 @@ window.onload = async () => {
     if (--timer == 0) {
       disable();
       statUp("Times up! The 6 letter word was: " + word + ".");
-      document.querySelector("#new-game").style.display = "block";
+      document.querySelector("#new-game").style.display = "inline-block";
     }
     if (timer >= 0)
       document.querySelector("#time").innerText = "Time: " + timer;
@@ -132,16 +132,20 @@ async function shuffleLetters() {
 }
 
 async function newGame() {
+  word = "";
+  input = "";
+  shuffled = [];
+  score = 0;
+  lists = [[], [], [], []];
+  found = [];
+  timer = 60;
   await gen().then(() => {
-
-    timer = 60;
-    score = 0;
     document.querySelector("#score").innerText = "Score: " + score;
     document.querySelector("#time").innerText = "Time: " + timer;
     document.querySelector("#new-game").style.display = "none";
     document.querySelector("#found").innerHTML = "";
-    
-    enable()
+
+    enable();
   });
 }
 
