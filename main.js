@@ -56,7 +56,6 @@ async function gen() {
     for (let j = 0; j < words.length; j++)
       if (words[j].length == i + 3 && check(words[j])) lists[i].push(words[j]);
   }
-
   await shuffleLetters();
   statUp(defStatus);
 }
@@ -64,15 +63,26 @@ async function gen() {
 function disable() {
   document
     .querySelectorAll("#letters button, #enter, #input, #shuffle")
-    .forEach((i) => (i.disabled = !i.disabled));
+    .forEach((i) => (i.disabled = true));
+}
+
+function enable() {
+  document
+    .querySelectorAll("#letters button, #enter, #input, #shuffle")
+    .forEach((i) => (i.disabled = false));
 }
 
 window.onload = async () => {
   await file.open("GET", "java/words.txt", true);
   file.send(null);
   setInterval(() => {
-    if (--timer == 0) disable();
-    if (timer >= 0) document.querySelector('#time').innerText = "Time: " + timer;
+    if (--timer == 0) {
+      disable();
+      statUp("Times up! The 6 letter word was: " + word + ".");
+      document.querySelector("#new-game").style.display = "block";
+    }
+    if (timer >= 0)
+      document.querySelector("#time").innerText = "Time: " + timer;
   }, 1000);
 };
 
@@ -121,4 +131,19 @@ async function shuffleLetters() {
   });
 }
 
-document.querySelector("#shuffle").addEventListener('click', shuffleLetters);
+async function newGame() {
+  await gen().then(() => {
+
+    timer = 60;
+    score = 0;
+    document.querySelector("#score").innerText = "Score: " + score;
+    document.querySelector("#time").innerText = "Time: " + timer;
+    document.querySelector("#new-game").style.display = "none";
+    document.querySelector("#found").innerHTML = "";
+    
+    enable()
+  });
+}
+
+document.querySelector("#shuffle").addEventListener("click", shuffleLetters);
+document.querySelector("#new-game").addEventListener("click", newGame);

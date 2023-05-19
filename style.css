@@ -1,15 +1,27 @@
 body {
   margin: 0;
   padding: 0;
-
+  overflow:hidden;
 }
 
-#letters div {
-  display: inline-block;
-  padding:8px;
-  cursor:pointer;
+#letters {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  grid-template-rows: 0.85fr;
+}
+
+#letters button {
+  align-items: center;
+  display: flex;
+  cursor: pointer;
   transition: 300ms;
+  aspect-ratio: 1;
+  justify-content: center;
 }
-#letters div:hover {
+#letters button:hover {
   background:#aaa;
+}
+#letters button:disabled {
+  background:#aaa;
+  cursor:auto;
 }
