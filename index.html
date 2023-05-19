@@ -9,7 +9,7 @@
     <link rel="icon" href="favicon.png" />
   </head>
   <body aria-disabled="true">
-    <div>
+    <div id="text">
       <div id="time">Time: 60</div>
       <div id="score">Score: 0</div>
       <div id="status"></div>
@@ -24,7 +24,7 @@
         onkeydown="(event => {if (event.key == 'Enter') enter()})(event)"
       />
       <input type="submit" value="↩" id="enter" onclick="enter()" />
-      <input type="submit" id="shuffle" value="⤮" />
+      <input type="submit" id="shuffle" value="shuffle" />
       <input
         type="submit"
         id="new-game"
@@ -34,5 +34,6 @@
     </div>
     <ul id="found"></ul>
     <script src="main.js"></script>
+    <script src="confetti.js"></script>
   </body>
 </html>

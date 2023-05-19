@@ -1,7 +1,7 @@
 let word = "";
 let input = "";
 let shuffled = [];
-let length = 6;
+let length = 7;
 let score = 0;
 let lists = [[], [], [], []];
 let found = [];
@@ -42,7 +42,7 @@ async function shuffle(array) {
 var file = new XMLHttpRequest();
 file.onreadystatechange = async () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
-    words = file.responseText.split("\n");
+    words = file.responseText.split("\n").filter(n => n.indexOf('\'') == -1);
 
     await gen();
   }
@@ -73,8 +73,12 @@ function enable() {
 }
 
 window.onload = async () => {
-  await file.open("GET", "java/words.txt", true);
+  await file.open("GET", "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", true);
   file.send(null);
+  start();
+};
+
+function start() {
   setInterval(() => {
     if (--timer == 0) {
       disable();
@@ -84,7 +88,7 @@ window.onload = async () => {
     if (timer >= 0)
       document.querySelector("#time").innerText = "Time: " + timer;
   }, 1000);
-};
+}
 
 function clickInput(val) {
   if (check(val)) input = val;
@@ -99,7 +103,11 @@ function enter() {
     check(input) &&
     hasWord(input)
   ) {
-    if (input.length == 6) score += 10;
+    if (input.length == length) {
+      confetti(50);
+      score += 10;
+      statUp('Wow!');
+    }
     else score += input.length;
 
     document.querySelector("#score").innerText = "Score: " + score;
@@ -128,6 +136,7 @@ async function shuffleLetters() {
     node.innerText = i;
     node.addEventListener("click", () => clickInput(input + i));
     document.querySelector("#letters").appendChild(node);
+    document.querySelector("#letters").style.gridTemplateColumns = Array(length).fill('auto').join(' ');
   });
 }
 

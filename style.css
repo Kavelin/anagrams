@@ -1,30 +1,52 @@
 body {
   margin: 0;
   padding: 0;
-  overflow:hidden;
+  overflow-x: hidden;
 }
-#inputs {
-  display: flex;
+
+#text {
+  font-size: 5vw;
+}
+
+#inputs input {
+  height: 25vh;
+  font-size: 8vw;
+}
+
+#inputs input[type="submit"] {
+  aspect-ratio: 1;
 }
 
 #letters {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto;
-  grid-template-rows: 0.85fr;
 }
 
 #letters button {
   align-items: center;
   display: flex;
-  cursor: pointer;
   transition: 300ms;
   aspect-ratio: 1;
   justify-content: center;
+  font-size: 8vw;
+  font-family: monospace;
 }
 #letters button:hover {
-  background:#aaa;
+  background: #aaa;
 }
 #letters button:disabled {
-  background:#aaa;
-  cursor:auto;
+  background: #aaa;
+  cursor: auto;
+}
+
+#found {
+  font-size: 5vw;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+#found li {
+  border: rgb(141, 141, 141) 1px solid;
+  border-radius: 0.5em;
+  padding:1em;
 }
