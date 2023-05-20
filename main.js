@@ -22,14 +22,11 @@ function check(str) {
 }
 
 function hasWord(str) {
-  let curList = lists[str.length - 3];
-  for (let i = 0; i < curList.length; i++) {
-    if (curList[i] == str) {
-      found.push(curList.splice(i, 1)[0]);
-      return true;
-    }
+  if (lists.includes(str)) {
+    found.push(lists.splice(lists.indexOf(str), 1));
+    return true;
   }
-  return false;
+  return false
 }
 
 async function shuffle(array) {
@@ -49,16 +46,9 @@ file.onreadystatechange = async () => {
 };
 
 async function gen() {
-  lists = Array(words.reduce((a, b) => a.length < b.length ? b : a, "").length - 3).fill([]);
   while (word.length != length)
     word = words[Math.floor(Math.random() * words.length)]; //make sure the word is `length` letters long
-
-  for (let i = 0; i < words.reduce((a, b) => a.length < b.length ? b : a, "").length - 3; i++) {
-    for (let j = 0; j < words.length; j++) {
-      //console.log(words[j].length, i)
-      if (words[j].length == i + 3 && check(words[j])) lists[i].push(words[j]);
-    }
-  }
+  lists = words.filter(n => check(n) && n.length >= 3);
   await shuffleLetters();
   statUp(defStatus);
 }
@@ -86,7 +76,7 @@ function start() {
     if (--timer == 0) {
       disable();
       statUp("Times up! The full anagram word was: " + word + ".");
-      document.querySelector("#new-game-options").style.display = "block";
+      setTimeout(()=> document.querySelector("#new-game-options").style.display = "block", 4000);
       clearInterval(interval);
     }
     if (timer >= 0)
@@ -125,6 +115,12 @@ function enter() {
 
   document.querySelector("#input").value = "";
   input = "";
+  if (lists.length == 0) {
+    disable();
+    statUp("You found all the words! The full anagram word was: " + word + ".");
+    setTimeout(()=> document.querySelector("#new-game-options").style.display = "block", 4000);
+    clearInterval(interval);
+  }
 }
 
 function statUp(str) {
