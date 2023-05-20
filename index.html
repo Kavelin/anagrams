@@ -20,15 +20,16 @@
     <div id="time">Time: 60</div>
     <div id="score">Score: 0</div>
     <div id="status"></div>
-    <div id="letters"></div>
   </div>
+  
+  <div id="letters"></div>
   <div id="inputs">
     <input placeholder="enter the word" id="input" spellcheck="false" oninput="clickInput(this.value)"
-      onkeydown="(event => {if (event.key == 'Enter') enter()})(event)" />
+      onkeydown="(event => {if (event.key == 'Enter' && this.value != '') enter()})(event)" />
     <input type="submit" value="↩" id="enter" onclick="enter()" />
     <input type="submit" id="shuffle" value="shuffle" />
   </div>
-  <ul id="found"></ul>
+  <ol id="found"></ol>
   <script src="main.js"></script>
   <script src="confetti.js"></script>
 </body>

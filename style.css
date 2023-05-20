@@ -23,7 +23,7 @@ body {
 
 #inputs input {
   height: 25vh;
-  font-size: 8vw;
+  font-size: 6vw;
 }
 
 #inputs input[type="submit"] {
@@ -55,9 +55,7 @@ body {
 
 #found {
   font-size: 5vw;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+  margin: 0.5em;
 }
 #found li {
   border: rgb(141, 141, 141) 1px solid;
