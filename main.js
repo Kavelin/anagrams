@@ -151,7 +151,6 @@ async function newGame() {
     document.querySelector("#time").innerText = "Time: " + timer;
     document.querySelector("#new-game-options").style.display = "none";
     document.querySelector("#found").innerHTML = "";
-    document.querySelector("#letters").style.gridTemplateColumns = Array(length).fill('auto').join(' ');
     enable();
     start();
   });
