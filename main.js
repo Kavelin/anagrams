@@ -23,7 +23,7 @@ function check(str) {
 
 function hasWord(str) {
   if (lists.includes(str)) {
-    found.push(lists.splice(lists.indexOf(str), 1));
+    found.push(lists.splice(lists.indexOf(str), 1)[0]);
     return true;
   }
   return false
@@ -55,20 +55,19 @@ async function gen() {
 
 function disable() {
   document
-    .querySelectorAll("#letters button, #enter, #input, #shuffle")
+    .querySelectorAll("#letters div, #enter, #input, #shuffle")
     .forEach((i) => (i.disabled = true));
 }
 
 function enable() {
   document
-    .querySelectorAll("#letters button, #enter, #input, #shuffle")
+    .querySelectorAll("#letters div, #enter, #input, #shuffle")
     .forEach((i) => (i.disabled = false));
 }
 
 window.onload = async () => {
   await file.open("GET", "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", true);
   file.send(null);
-  //start();
 };
 
 function start() {
@@ -76,7 +75,10 @@ function start() {
     if (--timer == 0) {
       disable();
       statUp("Times up! The full anagram word was: " + word + ".");
-      setTimeout(()=> document.querySelector("#new-game-options").style.display = "block", 4000);
+      setTimeout(()=> {
+        document.querySelector("#new-game-options").style.display = "block";
+        document.querySelector("#found").innerHTML = "";
+      }, 4000);
       clearInterval(interval);
     }
     if (timer >= 0)
@@ -131,9 +133,9 @@ async function shuffleLetters() {
   document.querySelector("#letters").innerHTML = "";
   shuffled = await shuffle(word.split(""));
   await shuffled.forEach((i) => {
-    let node = document.createElement("button");
+    let node = document.createElement("div");
     node.innerText = i;
-    node.addEventListener("click", () => clickInput(input + i));
+    node.addEventListener("click", (e) => (e.target.disabled) ? clickInput(input + i) : 0 );
     document.querySelector("#letters").appendChild(node);
   });
 }
@@ -150,7 +152,6 @@ async function newGame() {
     document.querySelector("#score").innerText = "Score: " + score;
     document.querySelector("#time").innerText = "Time: " + timer;
     document.querySelector("#new-game-options").style.display = "none";
-    document.querySelector("#found").innerHTML = "";
     enable();
     start();
   });

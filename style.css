@@ -34,7 +34,7 @@ body {
   display: flex;
 }
 
-#letters button {
+#letters div {
   align-items: center;
   display: flex;
   transition: 300ms;
@@ -45,10 +45,10 @@ body {
   width: 100vw;
 
 }
-#letters button:hover {
+#letters div:hover {
   background: #aaa;
 }
-#letters button:disabled {
+#letters div:disabled {
   background: #aaa;
   cursor: auto;
 }
