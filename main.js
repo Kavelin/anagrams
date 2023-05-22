@@ -1,15 +1,19 @@
 let word = "";
 let input = "";
-let shuffled = [];
+let defStatus = "Enter a word with the given letters";
+
 let length = 7;
 let score = 0;
-let lists = [];
-let found = [];
 let timer = 60;
-let defStatus = "Enter a word with the given letters";
+
 let interval;
 
+let shuffled = [];
+let lists = [];
+let found = [];
 let words = [];
+
+let wins;
 
 function check(str) {
   let temp = word.valueOf();
@@ -68,6 +72,12 @@ function enable() {
 window.onload = async () => {
   await file.open("GET", "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", true);
   file.send(null);
+  wins = JSON.parse(localStorage.getItem('anagram-wins')) || [];
+  wins.forEach(i => {
+    let node = document.createElement("li");
+    node.innerHTML = "Word: <b>" +  i.word + "</b>, Score: <b>" + i.score + "</b>";
+    document.querySelector("#wins").appendChild(node);
+  })
 };
 
 function start() {
@@ -75,6 +85,8 @@ function start() {
     if (--timer == 0) {
       disable();
       statUp("Times up! The full anagram word was: " + word + ".");
+      wins.push({word, score});
+      localStorage.setItem('anagram-wins', JSON.stringify(wins));
       setTimeout(()=> {
         document.querySelector("#new-game-options").style.display = "block";
         document.querySelector("#found").innerHTML = "";

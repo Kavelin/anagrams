@@ -9,27 +9,43 @@ body {
 }
 
 #new-game-options {
-  position:absolute;
-  background:white;
-  width:100vw;
-  height:100vh;
-  font-size:5vw;
+  position: absolute;
+  background: white;
+  width: 100vw;
+  height: 100vh;
+  font-size: 2vw;
   user-select: none;
 }
 
 #new-game-options input {
-  font-size:5vw;
+  font-size: 2vw;
 }
+
 
 #inputs input {
   height: 25vh;
-  font-size: 6vw;
+  font-size: 4vw;
+  padding:5px;
 }
 
 #inputs input[type="submit"] {
   aspect-ratio: 1;
 }
 
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  #new-game-options {
+    font-size: 5vw;
+  }
+  #new-game-options input {
+    font-size: 6vw;
+  }
+  #inputs input {
+    width:100%;
+    font-size:6vw;
+  }
+}
 #letters {
   display: flex;
 }
@@ -55,10 +71,12 @@ body {
 
 #found {
   font-size: 5vw;
-  margin: 0.5em;
+  list-style-position: inside;
+  margin:0.25em;
+  padding:0.25em;
 }
 #found li {
   border: rgb(141, 141, 141) 1px solid;
   border-radius: 0.5em;
-  padding: 1em;
+  padding: 1em ;
 }
