@@ -43,7 +43,7 @@ body {
   font-size: 8vw;
   font-family: monospace;
   width: 100vw;
-
+  user-select: none;
 }
 #letters div:hover {
   background: #aaa;

@@ -135,9 +135,13 @@ async function shuffleLetters() {
   await shuffled.forEach((i) => {
     let node = document.createElement("div");
     node.innerText = i;
-    node.addEventListener("click", (e) => (e.target.disabled) ? clickInput(input + i) : 0 );
+    node.addEventListener("click", (e) => (!e.target.disabled) ? clickInput(input + i) : 0 );
     document.querySelector("#letters").appendChild(node);
   });
+  let backNode = document.createElement("div");
+  backNode.innerHTML = `<i class="material-icons">&#xe14a;</i>`;
+  backNode.addEventListener("click", (e) => (!e.target.disabled) ? clickInput(input.substring(0, input.length - 1)) : 0 );
+  document.querySelector("#letters").appendChild(backNode);
 }
 
 async function newGame() {

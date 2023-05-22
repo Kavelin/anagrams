@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Anagrams</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Anagrams</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.png" />
-</head>
+  <body>
+    <div id="new-game-options" style="display: block">
+      <h1>Anagrams</h1>
+      Length:
+      <input type="number" value="6" max="10" min="3" id="length-of-word" />
+      <input type="submit" id="new-game" value="new game" />
+    </div>
+    <div id="text">
+      <div id="time">Time: 60</div>
+      <div id="score">Score: 0</div>
+      <div id="status"></div>
+    </div>
 
-<body>
-  <div id="new-game-options" style="display:block;">
-    <h1>Anagrams</h1>
-    Length: <input type="number" value="6" max="10" min="3" id="length-of-word">
-    <input type="submit" id="new-game" value="new game"/>
-  </div>
-  <div id="text">
-    <div id="time">Time: 60</div>
-    <div id="score">Score: 0</div>
-    <div id="status"></div>
-  </div>
-  
-  <div id="letters"></div>
-  <div id="inputs">
-    <input placeholder="enter the word" id="input" spellcheck="false" oninput="clickInput(this.value)"
-      onkeydown="(event => {if (event.key == 'Enter' && this.value != '') enter()})(event)" />
-    <input type="submit" value="↩" id="enter" onclick="enter()" />
-    <input type="submit" id="shuffle" value="shuffle" />
-  </div>
-  <ol id="found"></ol>
-  <script src="main.js"></script>
-  <script src="confetti.js"></script>
-</body>
-
+    <div id="letters"></div>
+    <div id="inputs">
+      <input
+        placeholder="enter the word"
+        id="input"
+        spellcheck="false"
+        oninput="clickInput(this.value)"
+        onkeydown="(event => {if (event.key == 'Enter' && this.value != '') enter()})(event)"
+      />
+      <input type="submit" value="↩" id="enter" onclick="enter()" />
+      <input type="submit" id="shuffle" value="shuffle" />
+    </div>
+    <ol id="found"></ol>
+    <script src="main.js"></script>
+    <script src="confetti.js"></script>
+  </body>
 </html>
