@@ -69,6 +69,11 @@ body {
   cursor: auto;
 }
 
+.trash {
+  font-size:initial!important;
+  margin:0.5em;
+}
+
 #found {
   font-size: 5vw;
   list-style-position: inside;

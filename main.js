@@ -30,7 +30,7 @@ function hasWord(str) {
     found.push(lists.splice(lists.indexOf(str), 1)[0]);
     return true;
   }
-  return false
+  return false;
 }
 
 async function shuffle(array) {
@@ -44,7 +44,9 @@ async function shuffle(array) {
 var file = new XMLHttpRequest();
 file.onreadystatechange = async () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
-    words = file.responseText.split("\n").filter(n => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)); //i'm getting it from an outside source so i have to filter it here
+    words = file.responseText
+      .split("\n")
+      .filter((n) => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)); //i'm getting it from an outside source so i have to filter it here
     await gen();
   }
 };
@@ -52,7 +54,7 @@ file.onreadystatechange = async () => {
 async function gen() {
   while (word.length != length)
     word = words[Math.floor(Math.random() * words.length)]; //make sure the word is `length` letters long
-  lists = words.filter(n => check(n) && n.length >= 3);
+  lists = words.filter((n) => check(n) && n.length >= 3);
   await shuffleLetters();
   statUp(defStatus);
 }
@@ -70,14 +72,28 @@ function enable() {
 }
 
 window.onload = async () => {
-  await file.open("GET", "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", true);
+  await file.open(
+    "GET",
+    "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt",
+    true
+  );
   file.send(null);
-  wins = JSON.parse(localStorage.getItem('anagram-wins')) || [];
-  wins.forEach(i => {
+  wins = JSON.parse(localStorage.getItem("anagram-wins")) || [];
+  wins.forEach((i, index) => {
     let node = document.createElement("li");
-    node.innerHTML = "Word: <b>" +  i.word + "</b>, Score: <b>" + i.score + "</b>";
+    node.innerHTML =
+      "Word: <b>" + i.word + "</b>, Score: <b>" + i.score + "</b>";
+    let del = document.createElement("button");
+    del.innerText = "delete";
+    del.classList.add("material-icons", "trash");
+    node.append(del);
     document.querySelector("#wins").appendChild(node);
-  })
+    del.addEventListener('click', e => {
+      wins.splice(index, 1);
+      document.querySelector("#wins").removeChild(node);
+      localStorage.setItem("anagram-wins", JSON.stringify(wins));
+    })
+  });
 };
 
 function start() {
@@ -85,9 +101,9 @@ function start() {
     if (--timer == 0) {
       disable();
       statUp("Times up! The full anagram word was: " + word + ".");
-      wins.push({word, score});
-      localStorage.setItem('anagram-wins', JSON.stringify(wins));
-      setTimeout(()=> {
+      wins.push({ word, score });
+      localStorage.setItem("anagram-wins", JSON.stringify(wins));
+      setTimeout(() => {
         document.querySelector("#new-game-options").style.display = "block";
         document.querySelector("#found").innerHTML = "";
       }, 4000);
@@ -114,7 +130,7 @@ function enter() {
     if (input.length == length) {
       confetti(50);
       score += 10;
-      statUp('Wow!');
+      statUp("Wow!");
     } else score += input.length;
 
     document.querySelector("#score").innerText = "Score: " + score;
@@ -132,7 +148,11 @@ function enter() {
   if (lists.length == 0) {
     disable();
     statUp("You found all the words! The full anagram word was: " + word + ".");
-    setTimeout(()=> document.querySelector("#new-game-options").style.display = "block", 4000);
+    setTimeout(
+      () =>
+        (document.querySelector("#new-game-options").style.display = "block"),
+      4000
+    );
     clearInterval(interval);
   }
 }
@@ -147,12 +167,16 @@ async function shuffleLetters() {
   await shuffled.forEach((i) => {
     let node = document.createElement("div");
     node.innerText = i;
-    node.addEventListener("click", (e) => (!e.target.disabled) ? clickInput(input + i) : 0 );
+    node.addEventListener("click", (e) =>
+      !e.target.disabled ? clickInput(input + i) : 0
+    );
     document.querySelector("#letters").appendChild(node);
   });
   let backNode = document.createElement("div");
   backNode.innerHTML = `<i class="material-icons">&#xe14a;</i>`;
-  backNode.addEventListener("click", (e) => (!e.target.disabled) ? clickInput(input.substring(0, input.length - 1)) : 0 );
+  backNode.addEventListener("click", (e) =>
+    !e.target.disabled ? clickInput(input.substring(0, input.length - 1)) : 0
+  );
   document.querySelector("#letters").appendChild(backNode);
 }
 
@@ -163,7 +187,7 @@ async function newGame() {
   score = 0;
   found = [];
   timer = 60;
-  length = Number(document.querySelector('#length-of-word').value);
+  length = Number(document.querySelector("#length-of-word").value);
   await gen().then(() => {
     document.querySelector("#score").innerText = "Score: " + score;
     document.querySelector("#time").innerText = "Time: " + timer;
