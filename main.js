@@ -13,6 +13,12 @@ let lists = [];
 let found = [];
 let words = [];
 
+let languages = [
+  "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt", //english
+  "https://raw.githubusercontent.com/words/an-array-of-spanish-words/master/index.json", //spanish
+  "https://raw.githubusercontent.com/rajkumarpal07/powertamil-dictionary/master/AllTamilWords.txt", //tamil
+];
+
 let wins;
 
 function check(str) {
@@ -42,12 +48,14 @@ async function shuffle(array) {
 }
 
 var file = new XMLHttpRequest();
-file.onreadystatechange = async () => {
+file.onreadystatechange = () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
-    words = file.responseText
+    if (file.responseURL.slice(-3) == 'txt') words = file.responseText
       .split("\n")
-      .filter((n) => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)); //i'm getting it from an outside source so i have to filter it here
-    await gen();
+      .filter((n) => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)).map(n=>n.trim()); //i'm getting it from an outside source so i have to filter it here
+    else if (file.responseURL.slice(-4) == 'json') {
+      words = JSON.parse(file.responseText);
+    }
   }
 };
 
@@ -74,11 +82,16 @@ function enable() {
 window.onload = async () => {
   await file.open(
     "GET",
-    "https://raw.githubusercontent.com/powerlanguage/word-lists/master/word-list-raw.txt",
+    languages[Number(document.querySelector("#language").selectedIndex)],
     true
   );
   file.send(null);
   wins = JSON.parse(localStorage.getItem("anagram-wins")) || [];
+  updateWins();
+};
+
+function updateWins() {
+  document.querySelector("#wins").innerHTML = "";
   wins.forEach((i, index) => {
     let node = document.createElement("li");
     node.innerHTML =
@@ -88,13 +101,13 @@ window.onload = async () => {
     del.classList.add("material-icons", "trash");
     node.append(del);
     document.querySelector("#wins").appendChild(node);
-    del.addEventListener('click', e => {
+    del.addEventListener("click", (e) => {
       wins.splice(index, 1);
       document.querySelector("#wins").removeChild(node);
       localStorage.setItem("anagram-wins", JSON.stringify(wins));
-    })
+    });
   });
-};
+}
 
 function start() {
   interval = setInterval(() => {
@@ -103,6 +116,7 @@ function start() {
       statUp("Times up! The full anagram word was: " + word + ".");
       wins.push({ word, score });
       localStorage.setItem("anagram-wins", JSON.stringify(wins));
+      updateWins();
       setTimeout(() => {
         document.querySelector("#new-game-options").style.display = "block";
         document.querySelector("#found").innerHTML = "";
@@ -163,7 +177,7 @@ function statUp(str) {
 
 async function shuffleLetters() {
   document.querySelector("#letters").innerHTML = "";
-  shuffled = await shuffle(word.split(""));
+  shuffled = await shuffle(word.split(''));
   await shuffled.forEach((i) => {
     let node = document.createElement("div");
     node.innerText = i;
@@ -199,3 +213,11 @@ async function newGame() {
 
 document.querySelector("#shuffle").addEventListener("click", shuffleLetters);
 document.querySelector("#new-game").addEventListener("click", newGame);
+document.querySelector("#language").addEventListener("input", async () => {
+  await file.open(
+    "GET",
+    languages[Number(document.querySelector("#language").selectedIndex)],
+    true
+  );
+  file.send(null);
+});
