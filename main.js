@@ -2,7 +2,7 @@ let word = "";
 let input = "";
 let defStatus = "Enter a word with the given letters";
 
-let length = 7;
+let length = 6;
 let score = 0;
 let timer = 60;
 
@@ -56,6 +56,7 @@ file.onreadystatechange = () => {
     else if (file.responseURL.slice(-4) == 'json') {
       words = JSON.parse(file.responseText);
     }
+    document.querySelector('#length-of-word').max = words.sort((a, b) => b.length - a.length)[0].length;
   }
 };
 
@@ -201,7 +202,7 @@ async function newGame() {
   score = 0;
   found = [];
   timer = 60;
-  length = Number(document.querySelector("#length-of-word").value);
+  //length = Number(document.querySelector("#length-of-word").value);
   await gen().then(() => {
     document.querySelector("#score").innerText = "Score: " + score;
     document.querySelector("#time").innerText = "Time: " + timer;
@@ -213,6 +214,10 @@ async function newGame() {
 
 document.querySelector("#shuffle").addEventListener("click", shuffleLetters);
 document.querySelector("#new-game").addEventListener("click", newGame);
+document.querySelector("#length-of-word").addEventListener("input", e => {
+  if (Number(e.target.value) > Number(e.target.max) || Number(e.target.value) < Number(e.target.min)) e.target.value = length;
+  else length = Number(e.target.value); 
+});
 document.querySelector("#language").addEventListener("input", async () => {
   await file.open(
     "GET",
