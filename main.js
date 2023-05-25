@@ -143,9 +143,9 @@ function enter() {
   ) {
     if (input.length == length) {
       confetti(50);
-      score += 10;
+      score += (input.length ** 2 - 8) * 2;
       statUp("Wow!");
-    } else score += input.length;
+    } else score += input.length ** 2 - 8;
 
     document.querySelector("#score").innerText = "Score: " + score;
 
@@ -153,7 +153,7 @@ function enter() {
     node.innerText = input;
     document.querySelector("#found").appendChild(node);
   } else if (input.length < 3) statUp("Too short!");
-  else if (input.length > 6) statUp("Too long!");
+  else if (input.length > length) statUp("Too long!");
   else if (found.indexOf(input) > -1) statUp("You already entered that!");
   else statUp("Not a word!");
 
