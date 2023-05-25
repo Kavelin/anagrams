@@ -14,7 +14,7 @@ let found = [];
 let words = [];
 
 let languages = [
-  "https://github.com/dolph/dictionary/raw/master/popular.txt", //english
+  "https://raw.githubusercontent.com/dolph/dictionary/master/popular.txt", //english
   "https://raw.githubusercontent.com/words/an-array-of-spanish-words/master/index.json", //spanish
   "https://raw.githubusercontent.com/rajkumarpal07/powertamil-dictionary/master/AllTamilWords.txt", //tamil
 ];
