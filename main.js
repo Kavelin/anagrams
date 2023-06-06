@@ -15,8 +15,13 @@ let words = [];
 
 let languages = [
   "https://raw.githubusercontent.com/dolph/dictionary/master/popular.txt", //english
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/english_450k.json", //english 450k
   "https://raw.githubusercontent.com/words/an-array-of-spanish-words/master/index.json", //spanish
-  "https://raw.githubusercontent.com/rajkumarpal07/powertamil-dictionary/master/AllTamilWords.txt", //tamil
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/french.json", //french
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/german_10k.json", //german
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/italian_60k.json",
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/tamil_1k.json", //tamil     //https://raw.githubusercontent.com/rajkumarpal07/powertamil-dictionary/master/AllTamilWords.txt
+  "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/korean_5k.json", //korean
 ];
 
 let wins;
@@ -50,13 +55,28 @@ async function shuffle(array) {
 var file = new XMLHttpRequest();
 file.onreadystatechange = () => {
   if (file.readyState === 4 && (file.status === 200 || file.status == 0)) {
-    if (file.responseURL.slice(-3) == 'txt') words = file.responseText
-      .split("\n")
-      .filter((n) => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g)).map(n=>n.trim()); //i'm getting it from an outside source so i have to filter it here
-    else if (file.responseURL.slice(-4) == 'json') {
-      words = JSON.parse(file.responseText);
+    if (file.responseURL.slice(-3) == "txt")
+      words = file.responseText
+        .split("\n")
+        .filter((n) => !n.match(/[&\/\\#,+()$~%.'":*?<>{}1234567890]/g))
+        .map((n) => n.trim());
+    //i'm getting it from an outside source so i have to filter it here
+    else if (file.responseURL.slice(-4) == "json") {
+      let temp = JSON.parse(file.responseText);
+      if (typeof words == "array") words = temp;
+      else words = temp.words;
     }
-    document.querySelector('#length-of-word').max = words.sort((a, b) => b.length - a.length)[0].length;
+    document.querySelector("#length-of-word").max = words.sort(
+      (a, b) => b.length - a.length
+    )[0].length;
+
+    if (
+      Number(document.querySelector("#length-of-word").value) >
+        Number(document.querySelector("#length-of-word").max) ||
+      Number(document.querySelector("#length-of-word").value) < Number(document.querySelector("#length-of-word").min)
+    )
+      document.querySelector("#length-of-word").value = length;
+    else length = Number(document.querySelector("#length-of-word").value);
   }
 };
 
@@ -178,7 +198,7 @@ function statUp(str) {
 
 async function shuffleLetters() {
   document.querySelector("#letters").innerHTML = "";
-  shuffled = await shuffle(word.split(''));
+  shuffled = await shuffle(word.split(""));
   await shuffled.forEach((i) => {
     let node = document.createElement("div");
     node.innerText = i;
@@ -214,9 +234,13 @@ async function newGame() {
 
 document.querySelector("#shuffle").addEventListener("click", shuffleLetters);
 document.querySelector("#new-game").addEventListener("click", newGame);
-document.querySelector("#length-of-word").addEventListener("input", e => {
-  if (Number(e.target.value) > Number(e.target.max) || Number(e.target.value) < Number(e.target.min)) e.target.value = length;
-  else length = Number(e.target.value); 
+document.querySelector("#length-of-word").addEventListener("input", (e) => {
+  if (
+    Number(e.target.value) > Number(e.target.max) ||
+    Number(e.target.value) < Number(e.target.min)
+  )
+    e.target.value = length;
+  else length = Number(e.target.value);
 });
 document.querySelector("#language").addEventListener("input", async () => {
   await file.open(
